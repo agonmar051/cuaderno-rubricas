@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Criterial — Cuaderno Docente</title>
+    <!-- Fuentes Tipográficas: Plus Jakarta Sans e Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-neutral: #F7F7F3;
+            --white: #FFFFFF;
+            --forest-primary: #1C4D3E;
+            --forest-dark: #123429;
+            --forest-light: #E8F0EC;
+            
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --text-subtle: #94A3B8;
+            --border-light: #E2E8F0;
+            --border-subtle: #F1F5F9;
+
+            /* Paleta Nivel Rúbricas */
+            --lvl-ins-bg: #FEF2F2;
+            --lvl-ins-border: #FCA5A5;
+            --lvl-ins-accent: #EF4444;
+
+            --lvl-inc-bg: #FFFBEB;
+            --lvl-inc-border: #FDE68A;
+            --lvl-inc-accent: #D97706;
+
+            --lvl-bas-bg: #FEFCE8;
+            --lvl-bas-border: #FEF08A;
+            --lvl-bas-accent: #CA8A04;
+
+            --lvl-not-bg: #F0FDF4;
+            --lvl-not-border: #BBF7D0;
+            --lvl-not-accent: #16A34A;
+
+            --lvl-sob-bg: #EFF6FF;
+            --lvl-sob-border: #BFDBFE;
+            --lvl-sob-accent: #2563EB;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-neutral);
+            color: var(--text-main);
+            padding-top: 100px;
+            padding-bottom: 60px;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 1. Header Flotante */
+        .floating-header {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 48px);
+            max-width: 1320px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 20px;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--forest-primary);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        .brand-title {
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+            color: var(--forest-primary);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .select-pill-group {
+            display: flex;
+            background: var(--bg-neutral);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            gap: 4px;
+        }
+
+        .select-pill {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .select-pill select {
+            appearance: none;
+            background: transparent;
+            border: none;
+            padding: 6px 28px 6px 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            outline: none;
+            border-radius: 8px;
+        }
+
+        .select-pill select:hover {
+            background: rgba(255,255,255,0.6);
+        }
+
+        .select-pill::after {
+            content: '▾';
+            position: absolute;
+            right: 10px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .btn-header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Sidebar Alumno */
+        .student-sidebar {
+            position: sticky;
+            top: 96px;
+            background: var(--white);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .student-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FECDD3, #FDA4AF);
+            color: #9F1239;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(253, 164, 175, 0.3);
+        }
+
+        .student-info-meta {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-subtle);
+        }
+
+        .student-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.25;
+            margin-top: 2px;
+        }
+
+        .score-display-box {
+            background: var(--bg-neutral);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .score-giant {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--forest-primary);
+            line-height: 1;
+            margin: 8px 0;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--forest-primary);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 99px;
+        }
+
+        /* Area de Contenido */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .activity-banner {
+            background: var(--forest-primary);
+            color: white;
+            border-radius: 24px;
+            padding: 28px 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(28, 77, 62, 0.15);
+        }
+
+        .banner-tag {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 6px;
+        }
+
+        .activity-title-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .activity-number-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .activity-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .indicator-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .indicator-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .indicator-title-text {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .criterios-group-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .criterio-pill {
+            background: var(--forest-light);
+            color: var(--forest-primary);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 99px;
+            letter-spacing: 0.03em;
+        }
+
+        .rubric-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        /* Tarjeta Nivel Rúbrica */
+        .level-card {
+            border-radius: 20px;
+            padding: 18px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+            position: relative;
+            background-color: var(--bg-neutral);
+        }
+
+        .level-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .level-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-radio {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--text-subtle);
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .level-card.selected .custom-radio {
+            border-width: 6px;
+        }
+
+        .level-name {
+            font-size: 0.88rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .level-range {
+            font-size: 0.72rem;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+
+        .level-desc-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        /* Desplegable Slider + Teclado */
+        .slider-container {
+            margin-top: 8px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .level-card.selected .slider-container {
+            display: flex;
+        }
+
+        .slider-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exact-score-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .number-input-field {
+            width: 54px;
+            padding: 4px 6px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-align: center;
+            outline: none;
+            background: white;
+            color: var(--text-main);
+        }
+
+        /* Estilos Semánticos por Nivel */
+        .lvl-insuficiente { background-color: var(--lvl-ins-bg); border-color: rgba(252, 165, 165, 0.4); }
+        .lvl-insuficiente .level-name, .lvl-insuficiente .exact-score-label { color: var(--lvl-ins-accent); }
+        .lvl-insuficiente.selected { border-color: var(--lvl-ins-accent); box-shadow: 0 0 0 1px var(--lvl-ins-accent); }
+        .lvl-insuficiente.selected .custom-radio, .lvl-insuficiente .number-input-field { border-color: var(--lvl-ins-accent); }
+
+        .lvl-incompleto { background-color: var(--lvl-inc-bg); border-color: rgba(253, 230, 138, 0.4); }
+        .lvl-incompleto .level-name, .lvl-incompleto .exact-score-label { color: var(--lvl-inc-accent); }
+        .lvl-incompleto.selected { border-color: var(--lvl-inc-accent); box-shadow: 0 0 0 1px var(--lvl-inc-accent); }
+        .lvl-incompleto.selected .custom-radio, .lvl-incompleto .number-input-field { border-color: var(--lvl-inc-accent); }
+
+        .lvl-basico { background-color: var(--lvl-bas-bg); border-color: rgba(254, 240, 138, 0.4); }
+        .lvl-basico .level-name, .lvl-basico .exact-score-label { color: var(--lvl-bas-accent); }
+        .lvl-basico.selected { border-color: var(--lvl-bas-accent); box-shadow: 0 0 0 1px var(--lvl-bas-accent); }
+        .lvl-basico.selected .custom-radio, .lvl-basico .number-input-field { border-color: var(--lvl-bas-accent); }
+
+        .lvl-notable { background-color: var(--lvl-not-bg); border-color: rgba(187, 247, 208, 0.4); }
+        .lvl-notable .level-name, .lvl-notable .exact-score-label { color: var(--lvl-not-accent); }
+        .lvl-notable.selected { border-color: var(--lvl-not-accent); box-shadow: 0 0 0 1px var(--lvl-not-accent); }
+        .lvl-notable.selected .custom-radio, .lvl-notable .number-input-field { border-color: var(--lvl-not-accent); }
+
+        .lvl-sobresaliente { background-color: var(--lvl-sob-bg); border-color: rgba(191, 219, 254, 0.4); }
+        .lvl-sobresaliente .level-name, .lvl-sobresaliente .exact-score-label { color: var(--lvl-sob-accent); }
+        .lvl-sobresaliente.selected { border-color: var(--lvl-sob-accent); box-shadow: 0 0 0 1px var(--lvl-sob-accent); }
+        .lvl-sobresaliente.selected .custom-radio, .lvl-sobresaliente .number-input-field { border-color: var(--lvl-sob-accent); }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 5px;
+            border-radius: 5px;
+            background: rgba(0,0,0,0.08);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: 3px solid var(--forest-primary);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary { background: var(--forest-primary); color: white; }
+        .btn-primary:hover { background: var(--forest-dark); }
+        .btn-secondary { background: var(--white); color: var(--text-main); border-color: var(--border-light); }
+        .btn-secondary:hover { background: var(--bg-neutral); }
+        .btn-danger { background: #FEF2F2; color: #EF4444; border-color: #FCA5A5; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 800px;
+            width: 92%;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .modal-title { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
+
+        .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+        .form-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+        .form-input, .form-textarea {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            font-family: inherit; font-size: 0.9rem; outline: none;
+        }
+
+        .ind-editor-item {
+            background: var(--bg-neutral);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 16px;
+        }
+
+        .criterio-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 1024px) {
+            .rubric-grid { grid-template-columns: repeat(2, 1fr); }
+            .main-layout { grid-template-columns: 1fr; }
+            .student-sidebar { position: static; }
+        }
+
+        @media (max-width: 640px) {
+            .rubric-grid { grid-template-columns: 1fr; }
+            .floating-header { flex-direction: column; gap: 12px; position: static; transform: none; width: 100%; margin-bottom: 20px; }
+            body { padding-top: 20px; }
+        }
+
+        @media print {
+            .floating-header, .btn, .nav-controls { display: none !important; }
+            body { background: white; padding: 0; }
+            .main-layout { display: block; }
+            .student-sidebar { box-shadow: none; border: none; }
+        }
+    
+        /* Pantalla de Bloqueo por Contraseña */
+        #authOverlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #123429 0%, #1C4D3E 100%);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        #authOverlay.hidden {
+            display: none !important;
+        }
+        .auth-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            text-align: center;
+        }
+        .auth-badge {
+            width: 56px;
+            height: 56px;
+            background: #E8F0EC;
+            color: #1C4D3E;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 1.35rem;
+            margin: 0 auto 18px;
+        }
+        .auth-card h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #1E293B;
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin: 0 0 8px;
+        }
+        .auth-card p {
+            color: #64748B;
+            font-size: 0.9rem;
+            margin: 0 0 24px;
+            line-height: 1.45;
+        }
+        .auth-input-group {
+            position: relative;
+            margin-bottom: 14px;
+        }
+        .auth-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 44px 13px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #1E293B;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .auth-input:focus {
+            border-color: #1C4D3E;
+        }
+        .auth-toggle-vis {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748B;
+            font-size: 1.1rem;
+            padding: 4px;
+        }
+        .auth-btn {
+            width: 100%;
+            padding: 13px;
+            background: #1C4D3E;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .auth-btn:hover {
+            background: #123429;
+        }
+        .auth-error {
+            color: #DC2626;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de Bloqueo por Contraseña -->
+    <div id="authOverlay">
+        <div class="auth-card">
+            <div class="auth-badge">🔒</div>
+            <h2>Acceso Restringido</h2>
+            <p>Introduce la contraseña docente para acceder al Cuaderno de Evaluación Criterial.</p>
+            <div class="auth-input-group">
+                <input type="password" id="authPasswordInput" class="auth-input" placeholder="Contraseña de acceso..." onkeydown="if(event.key==='Enter') verificarAcceso()">
+                <button type="button" class="auth-toggle-vis" onclick="toggleVisibilidadPassword()" title="Mostrar / Ocultar">👁️</button>
+            </div>
+            <button type="button" class="auth-btn" onclick="verificarAcceso()">Entrar al Cuaderno</button>
+            <div id="authErrorMsg" class="auth-error"></div>
+        </div>
+    </div>
+
+
+    <!-- 1. Header Flotante -->
+    <header class="floating-header">
+        <div class="brand-logo">
+            <div class="brand-icon">EC</div>
+            <div class="brand-title">Evaluación Criterial</div>
+        </div>
+
+        <div class="nav-controls">
+            <div class="select-pill-group">
+                <div class="select-pill">
+                    <select id="materiaSelect" onchange="alCambiarMateria()"></select>
+                </div>
+                <div class="select-pill">
+                    <select id="grupoSelect" onchange="alCambiarGrupo()"></select>
+                </div>
+                <div class="select-pill">
+                    <select id="actividadSelect" onchange="alCambiarActividad()"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-header-actions">
+            <button class="btn btn-secondary" onclick="abrirModalAlumnos()">👥 Alumnos</button>
+            <button class="btn btn-secondary" onclick="abrirModalEditarActividad()">✏️ Editar</button>
+            <button class="btn btn-primary" onclick="abrirModalNuevaActividad()">➕ Nueva</button>
+            <button class="btn btn-secondary" onclick="descargarAppConDatos()" title="Descarga una copia de esta aplicación con todos tus grupos, alumnos, rúbricas y calificaciones grabados dentro del código">💾 Guardar App con Datos</button>
+            <button class="btn btn-secondary" onclick="cambiarContrasenaAcceso()" title="Cambiar la contraseña de acceso a la aplicación">🔑 Clave</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="main-layout">
+            
+            <!-- Panel Lateral de Alumno -->
+            <aside class="student-sidebar">
+                <div>
+                    <span class="student-info-meta">Estudiante seleccionado</span>
+                    <div class="select-pill" style="margin-top: 8px; width: 100%; background: var(--bg-neutral); border: 1px solid var(--border-light); border-radius: 12px;">
+                        <select id="alumnoSelect" onchange="cargarEvaluacion()" style="width: 100%; padding: 10px 12px;">
+                            <option value="">-- Seleccionar Alumno --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="studentDetailBox" style="display: none; flex-direction: column; gap: 20px;">
+                    <div class="student-card-header">
+                        <div class="avatar-circle" id="studentAvatar">--</div>
+                        <div>
+                            <span class="student-info-meta">Expediente Activo</span>
+                            <div class="student-name" id="studentNameDisplay">Nombre Alumno</div>
+                        </div>
+                    </div>
+
+                    <div class="score-display-box">
+                        <span class="student-info-meta">Nota Media Criterial</span>
+                        <div class="score-giant" id="notaFinal">--</div>
+                        <span class="student-info-meta" id="evalState">Sin evaluar</span>
+                        
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressBarFill"></div>
+                        </div>
+
+                        <div id="criteriosLiveContainer" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 6px; text-align: left;"></div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="guardarEvaluacion()">💾 Guardar Evaluación</button>
+                        <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="exportarPDFRubricaClassroom()">📋 PDF Rúbrica (Classroom)</button>
+                        <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="exportarPDFAlumnoActividad()">📄 PDF Evaluación Alumno</button>
+                        <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="exportarPDFProgresoMateriaAlumno()">📈 PDF Progreso en Materia</button>
+                        <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="exportarPDFCriteriosClase()">👥 Informe Clase (PDF)</button>
+                        <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="exportarCSV()">📊 Exportar CSV</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Area Principal -->
+            <section class="content-area">
+                <div class="activity-banner" id="activityBanner" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+                    <div>
+                        <div class="banner-tag">Unidad de Evaluación Criterial</div>
+                        <div class="activity-title-group">
+                            <div class="activity-number-badge" id="actNumBadge">01</div>
+                            <h2 id="actTitleDisplay">Seleccione o cree una actividad</h2>
+                        </div>
+                    </div>
+                    <button class="btn" style="background: rgba(255,255,255,0.16); color: white; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(8px);" onclick="exportarPDFRubricaClassroom()">📋 PDF Rúbrica (Classroom)</button>
+                </div>
+
+                <div id="rubricaContainer" style="display: flex; flex-direction: column; gap: 20px;"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modales de Edición / Gestión -->
+    <div class="modal-overlay" id="modalActividad">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalActividadTituloHeader">Configurar Actividad</h3>
+                <button class="btn btn-secondary" onclick="cerrarModalActividad()">✕</button>
+            </div>
+            <input type="hidden" id="editActividadId" value="">
+            
+            <div class="form-field">
+                <label class="form-label">Nombre de la Actividad</label>
+                <input type="text" class="form-input" id="nuevaActTitulo" placeholder="Ej: Lámina 2 - Perspectiva Cónica">
+            </div>
+
+            <h4 class="form-label" style="margin: 20px 0 10px 0;">Indicadores y Rúbrica de Evaluación</h4>
+            <div id="contenedorCreadorIndicadores"></div>
+
+            <button type="button" class="btn btn-secondary" onclick="agregarCampoIndicadorModal()" style="margin-bottom: 20px;">+ Añadir Indicador</button>
+
+            <div style="display:flex; justify-content:flex-end; gap:12px; border-top: 1px solid var(--border-light); padding-top: 20px;">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalActividad()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarActividadModal()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalAlumnos">
+        <div class="modal-box" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Gestionar Alumnado</h3>
+                <button class="btn btn-secondary" onclick="cerrarModalAlumnos()">✕</button>
+            </div>
+            <p class="student-info-meta" style="margin-bottom: 12px;">Materia y Grupo: <strong id="grupoAlumnosLabel" style="color: var(--text-main);"></strong></p>
+            
+            <div class="form-field">
+                <label class="form-label">Listado de Nombres (Un alumno por línea)</label>
+                <textarea class="form-textarea" id="listaAlumnosTextarea" rows="10" placeholder="García López, María&#10;Pérez Gómez, Juan"></textarea>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:12px; margin-top: 20px;">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalAlumnos()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarAlumnosModal()">Guardar Lista</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* Configuración de Contraseña de Acceso */
+        const CLAVE_INICIAL_APP = "DOCENTE2026";
+        let claveActualApp = localStorage.getItem('docente_clave_app_v1') || CLAVE_INICIAL_APP;
+
+        function toggleVisibilidadPassword() {
+            const input = document.getElementById('authPasswordInput');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function verificarAcceso() {
+            const input = document.getElementById('authPasswordInput');
+            const err = document.getElementById('authErrorMsg');
+            if (input.value === claveActualApp) {
+                sessionStorage.setItem('docente_sesion_autorizada', 'true');
+                document.getElementById('authOverlay').classList.add('hidden');
+                err.textContent = '';
+                input.value = '';
+            } else {
+                err.textContent = 'Contraseña incorrecta. Inténtalo de nuevo.';
+                input.focus();
+                input.select();
+            }
+        }
+
+        function cambiarContrasenaAcceso() {
+            const actual = prompt("Introduce tu contraseña actual para confirmar:");
+            if (actual === null) return;
+            if (actual !== claveActualApp) {
+                alert("La contraseña actual no es correcta.");
+                return;
+            }
+            const nueva = prompt("Escribe la nueva contraseña de acceso:");
+            if (!nueva || nueva.trim().length < 3) {
+                alert("La contraseña debe tener al menos 3 caracteres.");
+                return;
+            }
+            claveActualApp = nueva.trim();
+            localStorage.setItem('docente_clave_app_v1', claveActualApp);
+            alert("✅ Contraseña actualizada.\n\nRecuerda pulsar '💾 Guardar App con Datos' si vas a subir el archivo a GitHub o abrirlo en otro ordenador para que lleve tu nueva clave.");
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('docente_sesion_autorizada') === 'true') {
+                const ov = document.getElementById('authOverlay');
+                if (ov) ov.classList.add('hidden');
+            } else {
+                const inp = document.getElementById('authPasswordInput');
+                if (inp) inp.focus();
+            }
+        });
+
+        const estructuraMaterias = [
+            { id: "ATEDU_1", nombre: "ATEDU 1º", grupos: ["A", "B"] },
+            { id: "EPVA_1", nombre: "EPVA 1º", grupos: ["A", "B"] },
+            { id: "PEPA_2", nombre: "PEPA 2º", grupos: ["Único"] },
+            { id: "EPVA_3", nombre: "EPVA 3º", grupos: ["A", "B"] },
+            { id: "EXPART_4", nombre: "Expresión Artística 4º", grupos: ["Único"] },
+            { id: "DIBTEC_4", nombre: "Dibujo Técnico 4º", grupos: ["Único"] }
+        ];
+
+        const alumnosIniciales = {
+            "EPVA_3_A": [
+                "Sandra Aguilar Luque", "Francisco David Barrera Rodríguez", "José Carmona García",
+                "Juan Carranza Fernández", "Jesús Conde Mallén", "Rocío Copete Sepúlveda",
+                "José María García Ávila", "Alejandra Gil García", "Aitana Luque Buzón",
+                "Borja Martínez Sánchez", "Indhira Mazuecos Benjumea", "Julio Muñoz Zamora",
+                "Estela Naranjo Garcés", "Laura Naranjo Lopera", "Aarón Ortega García",
+                "Saúl Pizarro Luque", "Álvaro Ramos Carrasco"
+            ],
+            "EPVA_3_B": [
+                "Gema Arrebola Navarro", "José Cantador García", "Agustín Carrasco Jiménez",
+                "Jairo Cruz Gallego", "Gonzalo Cruz Giráldez", "Rosario Gallego Velázquez",
+                "Lucía García Aranda", "Marta García Peligro", "David Gómez Rodríguez",
+                "Lucía Guzmán Villanueva", "Mengyao Li", "Sergio Linares Torres",
+                "Jesús Muñoz Zamora", "Borja Nieto Fernández", "Daniel Luis Rubio Lozano",
+                "Ángel Sánchez Sánchez", "Eduardo Villarino Naranjo"
+            ]
+        };
+
+        const actividadesIniciales = {
+            "EPVA_3": [
+                {
+                    id: "act1",
+                    titulo: "Fase de Bocetaje y Exploración Gráfica",
+                    indicadores: [
+                        {
+                            id: "ind1",
+                            titulo: "1. Cantidad y variedad compositiva/encuadres en bocetos",
+                            criterio: "EPV.3.8.2", // Mantenido para retrocompatibilidad
+                            criterios: ["EPV.3.8.2"],
+                            niveles: [
+                                { id: "ins", nombre: "Insuficiente", min: 1.0, max: 2.9, desc: "Realiza menos de 2 bocetos básicos. Sin variación de encuadre." },
+                                { id: "inc", nombre: "Incompleto", min: 3.0, max: 4.9, desc: "Presenta 2 o 3 bocetos con variaciones escasas o repetitivas." },
+                                { id: "bas", nombre: "Básico", min: 5.0, max: 6.9, desc: "Elabora los 4 bocetos requeridos probando composiciones simples." },
+                                { id: "not", nombre: "Notable", min: 7.0, max: 8.9, desc: "Realiza 4 o más bocetos con encuadres claramente diferenciados." },
+                                { id: "sob", nombre: "Sobresaliente", min: 9.0, max: 10.0, desc: "Amplia variedad compositiva con ángulos ricos e innovadores." }
+                            ]
+                        },
+                        {
+                            id: "ind2",
+                            titulo: "2. Selección e idoneidad del esquema de color y técnicas",
+                            criterio: "EPV.3.5.3",
+                            criterios: ["EPV.3.5.3"],
+                            niveles: [
+                                { id: "ins", nombre: "Insuficiente", min: 1.0, max: 2.9, desc: "Técnica o color elegidos al azar, no adecuados ni funcionales." },
+                                { id: "inc", nombre: "Incompleto", min: 3.0, max: 4.9, desc: "Prueba el color de forma previsible o poco cuidada." },
+                                { id: "bas", nombre: "Básico", min: 5.0, max: 6.9, desc: "Aplica procedimientos técnicos y pruebas de color funcionales." },
+                                { id: "not", nombre: "Notable", min: 7.0, max: 8.9, desc: "Selecciona con acierto esquemas cromáticos que potencian la gráfica." },
+                                { id: "sob", nombre: "Sobresaliente", min: 9.0, max: 10.0, desc: "Dominio y selección experta de técnicas y armonías de color." }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const evaluacionesIniciales = {};
+
+        let alumnosGlobal = JSON.parse(localStorage.getItem('docente_alumnos_v3')) || alumnosIniciales;
+        let actividadesGlobal = JSON.parse(localStorage.getItem('docente_actividades_v3')) || actividadesIniciales;
+        let evaluacionesGlobal = JSON.parse(localStorage.getItem('docente_evaluaciones_v3')) || evaluacionesIniciales;
+        let notasActuales = {};
+
+        // Utilidad para extraer e inspeccionar lista de criterios de un indicador (soporta singular legacy y plural)
+        function getCriteriosDeIndicador(ind) {
+            if (ind.criterios && Array.isArray(ind.criterios) && ind.criterios.length > 0) {
+                return ind.criterios.filter(c => c && c.trim() !== '');
+            }
+            if (ind.criterio && typeof ind.criterio === 'string' && ind.criterio.trim() !== '') {
+                return [ind.criterio.trim()];
+            }
+            return ['General'];
+        }
+
+        // Función de comparación para ordenar numéricamente códigos de criterio (ej: 1.1, 1.2, 2.1, 10.1)
+        function compararCodigosCriterio(a, b) {
+            return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+        }
+
+        window.onload = function() {
+            poblarMaterias();
+            alCambiarMateria();
+        };
+
+        function poblarMaterias() {
+            const select = document.getElementById('materiaSelect');
+            select.innerHTML = '';
+            estructuraMaterias.forEach(mat => {
+                let opt = document.createElement('option');
+                opt.value = mat.id;
+                opt.textContent = mat.nombre;
+                select.appendChild(opt);
+            });
+        }
+
+        function alCambiarMateria() {
+            const matId = document.getElementById('materiaSelect').value;
+            const matObj = estructuraMaterias.find(m => m.id === matId);
+
+            const selectGrupo = document.getElementById('grupoSelect');
+            selectGrupo.innerHTML = '';
+            matObj.grupos.forEach(g => {
+                let opt = document.createElement('option');
+                opt.value = g;
+                opt.textContent = g === "Único" ? "Grupo Único" : `Grupo ${g}`;
+                selectGrupo.appendChild(opt);
+            });
+
+            selectGrupo.disabled = (matObj.grupos.length === 1 && matObj.grupos[0] === "Único");
+            alCambiarGrupo();
+        }
+
+        function alCambiarGrupo() {
+            poblarActividades();
+            poblarAlumnos();
+            alCambiarActividad();
+        }
+
+        function poblarActividades() {
+            const matId = document.getElementById('materiaSelect').value;
+            const listAct = actividadesGlobal[matId] || [];
+            const select = document.getElementById('actividadSelect');
+            select.innerHTML = '';
+
+            if (listAct.length === 0) {
+                select.innerHTML = '<option value="">-- Sin Actividades --</option>';
+                return;
+            }
+
+            listAct.forEach(act => {
+                let opt = document.createElement('option');
+                opt.value = act.id;
+                opt.textContent = act.titulo;
+                select.appendChild(opt);
+            });
+        }
+
+        function poblarAlumnos() {
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const key = `${matId}_${grupo}`;
+            const listAlumnos = alumnosGlobal[key] || [];
+
+            const select = document.getElementById('alumnoSelect');
+            select.innerHTML = '<option value="">-- Seleccionar Alumno --</option>';
+
+            listAlumnos.forEach((nombre, index) => {
+                let opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = nombre;
+                select.appendChild(opt);
+            });
+        }
+
+        function alCambiarActividad() {
+            cargarRubricaActual();
+            cargarEvaluacion();
+        }
+
+        function getActividadActual() {
+            const matId = document.getElementById('materiaSelect').value;
+            const actId = document.getElementById('actividadSelect').value;
+            const list = actividadesGlobal[matId] || [];
+            return list.find(a => a.id === actId);
+        }
+
+        function cargarRubricaActual() {
+            const act = getActividadActual();
+            const container = document.getElementById('rubricaContainer');
+            const actTitleDisplay = document.getElementById('actTitleDisplay');
+            const actNumBadge = document.getElementById('actNumBadge');
+
+            container.innerHTML = '';
+
+            if (!act) {
+                actTitleDisplay.textContent = "Sin actividad seleccionada";
+                actNumBadge.textContent = "--";
+                container.innerHTML = '<div class="indicator-card"><p style="color:var(--text-muted);">No hay ninguna actividad seleccionada. Haz clic en <strong>➕ Nueva</strong> para crear una.</p></div>';
+                return;
+            }
+
+            actTitleDisplay.textContent = act.titulo;
+            const selectAct = document.getElementById('actividadSelect');
+            const indexAct = selectAct.selectedIndex + 1;
+            actNumBadge.textContent = indexAct < 10 ? `0${indexAct}` : indexAct;
+
+            act.indicadores.forEach((ind) => {
+                let block = document.createElement('div');
+                block.className = 'indicator-card';
+                
+                const listaCrit = getCriteriosDeIndicador(ind);
+                const pillsHTML = listaCrit.map(c => `<span class="criterio-pill">${c}</span>`).join('');
+
+                let html = `
+                    <div class="indicator-header-row">
+                        <span class="indicator-title-text">${ind.titulo}</span>
+                        <div class="criterios-group-pills">${pillsHTML}</div>
+                    </div>
+                    <div class="rubric-grid">
+                `;
+
+                ind.niveles.forEach(lvl => {
+                    const lvlKey = lvl.nombre.toLowerCase();
+                    const valorMedio = ((lvl.min + lvl.max) / 2).toFixed(1);
+
+                    html += `
+                        <div class="level-card lvl-${lvlKey}" 
+                             id="card_${ind.id}_${lvl.id}"
+                             onclick="selectNivel('${ind.id}', '${lvl.id}', ${lvl.min}, ${lvl.max})">
+                            <div class="level-card-top">
+                                <div>
+                                    <div class="level-name">${lvl.nombre}</div>
+                                    <div class="level-range">${lvl.min}-${lvl.max}</div>
+                                </div>
+                                <div class="custom-radio"></div>
+                            </div>
+                            <div class="level-desc-text">${lvl.desc}</div>
+                            
+                            <div class="slider-container" onclick="event.stopPropagation()">
+                                <div class="slider-controls-row">
+                                    <span class="exact-score-label">NOTA EXACTA</span>
+                                    <input type="number" 
+                                           class="number-input-field" 
+                                           id="input_num_${ind.id}_${lvl.id}" 
+                                           min="${lvl.min}" 
+                                           max="${lvl.max}" 
+                                           step="0.1" 
+                                           value="${valorMedio}"
+                                           onchange="manualScoreInput('${ind.id}', '${lvl.id}', this.value, ${lvl.min}, ${lvl.max})">
+                                </div>
+                                <input type="range" 
+                                       id="input_range_${ind.id}_${lvl.id}" 
+                                       min="${lvl.min}" 
+                                       max="${lvl.max}" 
+                                       step="0.1" 
+                                       value="${valorMedio}"
+                                       oninput="manualScoreSlider('${ind.id}', '${lvl.id}', this.value, ${lvl.min}, ${lvl.max})">
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+                block.innerHTML = html;
+                container.appendChild(block);
+            });
+        }
+
+        function selectNivel(indId, lvlId, minScore, maxScore) {
+            if (document.getElementById('alumnoSelect').value === "") {
+                alert("Por favor, selecciona primero un alumno/a en el panel lateral.");
+                return;
+            }
+
+            const act = getActividadActual();
+            const ind = act.indicadores.find(i => i.id === indId);
+
+            ind.niveles.forEach(l => {
+                let card = document.getElementById(`card_${indId}_${l.id}`);
+                if(card) card.classList.remove('selected');
+            });
+
+            let selectedCard = document.getElementById(`card_${indId}_${lvlId}`);
+            let rangeInput = document.getElementById(`input_range_${indId}_${lvlId}`);
+            let numberInput = document.getElementById(`input_num_${indId}_${lvlId}`);
+
+            if(selectedCard) selectedCard.classList.add('selected');
+            
+            if (rangeInput && numberInput) {
+                if (!rangeInput.dataset.touched) {
+                    const media = ((minScore + maxScore) / 2).toFixed(1);
+                    rangeInput.value = media;
+                    numberInput.value = media;
+                    rangeInput.dataset.touched = "true";
+                }
+                notasActuales[indId] = parseFloat(numberInput.value);
+            }
+
+            calcularTotales();
+        }
+
+        function manualScoreSlider(indId, lvlId, val, minScore, maxScore) {
+            let numVal = parseFloat(val);
+            let numberInput = document.getElementById(`input_num_${indId}_${lvlId}`);
+            if(numberInput) numberInput.value = numVal.toFixed(1);
+
+            let rangeInput = document.getElementById(`input_range_${indId}_${lvlId}`);
+            if(rangeInput) rangeInput.dataset.touched = "true";
+
+            selectNivel(indId, lvlId, minScore, maxScore);
+            notasActuales[indId] = numVal;
+            calcularTotales();
+        }
+
+        function manualScoreInput(indId, lvlId, val, minScore, maxScore) {
+            let numVal = parseFloat(val);
+            if (isNaN(numVal) || numVal < minScore || numVal > maxScore) {
+                alert(`Introduce un valor numérico entre ${minScore} y ${maxScore}`);
+                let rangeInput = document.getElementById(`input_range_${indId}_${lvlId}`);
+                if(rangeInput) document.getElementById(`input_num_${indId}_${lvlId}`).value = rangeInput.value;
+                return;
+            }
+
+            let rangeInput = document.getElementById(`input_range_${indId}_${lvlId}`);
+            if(rangeInput) {
+                rangeInput.value = numVal;
+                rangeInput.dataset.touched = "true";
+            }
+
+            selectNivel(indId, lvlId, minScore, maxScore);
+            notasActuales[indId] = numVal;
+            calcularTotales();
+        }
+
+        // CÁLCULO DE TOTALES CON SOPORTE PARA MÚLTIPLES CRITERIOS POR INDICADOR Y PONDERACIÓN IGUALITARIA
+        function calcularTotales() {
+            const act = getActividadActual();
+            if (!act) return;
+
+            const notasPorCriterio = {};
+            const todosLosCriterios = new Set();
+            let totalIndicadoresEvaluados = 0;
+
+            act.indicadores.forEach(ind => {
+                const listaCrit = getCriteriosDeIndicador(ind);
+                listaCrit.forEach(c => todosLosCriterios.add(c));
+
+                if (notasActuales[ind.id] !== undefined) {
+                    totalIndicadoresEvaluados++;
+                    listaCrit.forEach(critName => {
+                        if (!notasPorCriterio[critName]) notasPorCriterio[critName] = [];
+                        notasPorCriterio[critName].push(notasActuales[ind.id]);
+                    });
+                }
+            });
+
+            const notaFinalElem = document.getElementById('notaFinal');
+            const evalState = document.getElementById('evalState');
+            const progressFill = document.getElementById('progressBarFill');
+            const criteriosContainer = document.getElementById('criteriosLiveContainer');
+
+            const codigosCriterios = Array.from(todosLosCriterios).sort(compararCodigosCriterio);
+            const mediasCriterios = [];
+
+            if (criteriosContainer) {
+                if (codigosCriterios.length > 0) {
+                    let htmlCrit = '<span class="student-info-meta" style="margin-bottom: 2px;">Nota por Criterio</span>';
+                    codigosCriterios.forEach(crit => {
+                        const arr = notasPorCriterio[crit];
+                        let valorTexto = '--';
+                        if (arr && arr.length > 0) {
+                            const media = arr.reduce((a, b) => a + b, 0) / arr.length;
+                            mediasCriterios.push(media);
+                            valorTexto = media.toFixed(2);
+                        }
+                        htmlCrit += `
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--white); padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-light); font-size: 0.8rem;">
+                                <span style="font-weight: 700; color: var(--text-main);">${crit}</span>
+                                <span style="font-weight: 800; color: var(--forest-primary);">${valorTexto}</span>
+                            </div>
+                        `;
+                    });
+                    criteriosContainer.innerHTML = htmlCrit;
+                } else {
+                    criteriosContainer.innerHTML = '';
+                }
+            } else {
+                codigosCriterios.forEach(crit => {
+                    const arr = notasPorCriterio[crit];
+                    if (arr && arr.length > 0) {
+                        mediasCriterios.push(arr.reduce((a, b) => a + b, 0) / arr.length);
+                    }
+                });
+            }
+
+            if (totalIndicadoresEvaluados === act.indicadores.length && totalIndicadoresEvaluados > 0) {
+                const mediaGlobalCriterios = (mediasCriterios.reduce((a, b) => a + b, 0) / mediasCriterios.length).toFixed(2);
+                notaFinalElem.textContent = mediaGlobalCriterios;
+                evalState.textContent = "Evaluación completa";
+                progressFill.style.width = `${(mediaGlobalCriterios / 10) * 100}%`;
+            } else {
+                notaFinalElem.textContent = `--`;
+                evalState.textContent = `Evaluados ${totalIndicadoresEvaluados} de ${act.indicadores.length} indicadores`;
+                progressFill.style.width = totalIndicadoresEvaluados > 0 ? `${(totalIndicadoresEvaluados / act.indicadores.length) * 100}%` : '0%';
+            }
+        }
+
+        function getClaveEvaluacion() {
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const actId = document.getElementById('actividadSelect').value;
+            const studentIdx = document.getElementById('alumnoSelect').value;
+            return `${matId}_${grupo}_${actId}_${studentIdx}`;
+        }
+
+        function cargarEvaluacion() {
+            const studentIdx = document.getElementById('alumnoSelect').value;
+            const studentDetailBox = document.getElementById('studentDetailBox');
+
+            if (studentIdx === "" || !getActividadActual()) {
+                studentDetailBox.style.display = "none";
+                resetForm();
+                return;
+            }
+
+            studentDetailBox.style.display = "flex";
+
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const nombreAlumno = alumnosGlobal[`${matId}_${grupo}`][studentIdx];
+            
+            document.getElementById('studentNameDisplay').textContent = nombreAlumno;
+            const initials = nombreAlumno.split(' ').map(n => n[0]).slice(0, 2).join('');
+            document.getElementById('studentAvatar').textContent = initials;
+
+            resetForm();
+
+            const key = getClaveEvaluacion();
+            if (evaluacionesGlobal[key]) {
+                notasActuales = { ...evaluacionesGlobal[key] };
+                const act = getActividadActual();
+
+                act.indicadores.forEach(ind => {
+                    let val = notasActuales[ind.id];
+                    if (val !== undefined) {
+                        let lvl = ind.niveles.find(l => val >= l.min && val <= l.max) || ind.niveles[0];
+                        let card = document.getElementById(`card_${ind.id}_${lvl.id}`);
+                        let rangeInput = document.getElementById(`input_range_${ind.id}_${lvl.id}`);
+                        let numberInput = document.getElementById(`input_num_${ind.id}_${lvl.id}`);
+
+                        if(card) card.classList.add('selected');
+                        if(rangeInput) { rangeInput.value = val; rangeInput.dataset.touched = "true"; }
+                        if(numberInput) { numberInput.value = val.toFixed(1); }
+                    }
+                });
+                calcularTotales();
+            }
+        }
+
+        function resetForm() {
+            notasActuales = {};
+            document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.slider-container input[type="range"]').forEach(i => { 
+                delete i.dataset.touched; 
+            });
+            calcularTotales();
+        }
+
+        function guardarEvaluacion() {
+            const studentIdx = document.getElementById('alumnoSelect').value;
+            if (studentIdx === "") return;
+
+            const key = getClaveEvaluacion();
+            evaluacionesGlobal[key] = notasActuales;
+            localStorage.setItem('docente_evaluaciones_v3', JSON.stringify(evaluacionesGlobal));
+            
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const alumnoNombre = alumnosGlobal[`${matId}_${grupo}`][studentIdx];
+            alert(`Evaluación de ${alumnoNombre} guardada correctamente.`);
+        }
+
+        /* Exportar PDF Individual del Alumno (Criterios Ordenados de Menor a Mayor) */
+        function exportarPDFAlumnoActividad() {
+            const studentIdx = document.getElementById('alumnoSelect').value;
+            if (studentIdx === "") {
+                alert("Selecciona un alumno.");
+                return;
+            }
+
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const act = getActividadActual();
+            const matObj = estructuraMaterias.find(m => m.id === matId);
+            const nombreAlumno = alumnosGlobal[`${matId}_${grupo}`][studentIdx];
+
+            const keyEval = getClaveEvaluacion();
+            const evalData = evaluacionesGlobal[keyEval] || {};
+
+            let htmlFilas = '';
+            const notasPorCriterio = {};
+
+            act.indicadores.forEach(ind => {
+                const val = evalData[ind.id];
+                let lvlNombre = '--';
+                let valStr = '--';
+
+                const listaCrit = getCriteriosDeIndicador(ind);
+
+                if (val !== undefined) {
+                    valStr = val.toFixed(1);
+                    const lvl = ind.niveles.find(l => val >= l.min && val <= l.max);
+                    if (lvl) lvlNombre = lvl.nombre;
+
+                    listaCrit.forEach(crit => {
+                        if (!notasPorCriterio[crit]) notasPorCriterio[crit] = [];
+                        notasPorCriterio[crit].push(val);
+                    });
+                }
+
+                htmlFilas += `
+                    <tr>
+                        <td><strong>${ind.titulo}</strong><br><small style="color:#64748B;">Criterios: ${listaCrit.join(', ')}</small></td>
+                        <td style="text-align:center;">${lvlNombre}</td>
+                        <td style="text-align:center; font-weight:bold; color:#1C4D3E;">${valStr}</td>
+                    </tr>
+                `;
+            });
+
+            // Resumen de Criterios ORDENADOS de menor a mayor
+            let htmlCriterios = '';
+            const criteriosOrdenados = Object.keys(notasPorCriterio).sort(compararCodigosCriterio);
+            const mediasCriterios = [];
+
+            criteriosOrdenados.forEach(crit => {
+                const arr = notasPorCriterio[crit];
+                const med = arr.reduce((a,b)=>a+b, 0) / arr.length;
+                mediasCriterios.push(med);
+                htmlCriterios += `
+                    <div style="flex:1; min-width:80px; background:#F7F7F3; padding:10px; border-radius:8px; text-align:center; border:1px solid #E2E8F0;">
+                        <div style="font-size:10px; color:#64748B; font-weight:700;">${crit}</div>
+                        <div style="font-size:16px; font-weight:800; color:#1C4D3E; margin-top:2px;">${med.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            const notaFinalActividad = mediasCriterios.length > 0 ? (mediasCriterios.reduce((a,b)=>a+b,0)/mediasCriterios.length).toFixed(2) : '--';
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Informe Alumno - ${nombreAlumno}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; margin: 30px; color: #1E293B; font-size: 12px; }
+                        .header { border-bottom: 2px solid #1C4D3E; padding-bottom: 12px; margin-bottom: 20px; }
+                        h1 { color: #1C4D3E; margin: 0 0 4px 0; font-size: 18px; font-weight: 800; }
+                        .meta { color: #64748B; font-size: 12px; margin: 2px 0; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        th, td { border: 1px solid #E2E8F0; padding: 10px; text-align: left; }
+                        th { background-color: #F7F7F3; color: #1C4D3E; font-size: 10px; text-transform: uppercase; }
+                        .box-score { background: #1C4D3E; color: white; padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>INFORME INDIVIDUAL DE EVALUACIÓN CRITERIAL</h1>
+                        <div class="meta"><strong>Alumno/a:</strong> ${nombreAlumno}</div>
+                        <div class="meta"><strong>Materia:</strong> ${matObj.nombre} | <strong>Grupo:</strong> ${grupo}</div>
+                        <div class="meta"><strong>Actividad:</strong> ${act.titulo}</div>
+                    </div>
+
+                    <h3 style="color:#1C4D3E; margin-bottom:8px;">Desglose por Indicadores</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Indicador</th>
+                                <th style="text-align:center; width:120px;">Nivel</th>
+                                <th style="text-align:center; width:80px;">Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>${htmlFilas}</tbody>
+                    </table>
+
+                    <h3 style="color:#1C4D3E; margin-top:20px; margin-bottom:8px;">Medias por Criterio de Evaluación (Ordenados)</h3>
+                    <div style="display:flex; flex-wrap:wrap; gap:10px;">${htmlCriterios}</div>
+
+                    <div class="box-score">
+                        <div>
+                            <strong style="font-size:14px;">Calificación Final de la Actividad</strong>
+                            <div style="font-size:10px; opacity:0.8;">Media aritmética igualitaria de los criterios evaluados</div>
+                        </div>
+                        <div style="font-size:28px; font-weight:800;">${notaFinalActividad} / 10</div>
+                    </div>
+
+                    <script>
+                        window.onload = function() { setTimeout(function() { window.print(); }, 400); };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        /* Informe de Progreso del Alumno en la Materia (Criterios Únicos Ordenados de Menor a Mayor) */
+        function exportarPDFProgresoMateriaAlumno() {
+            const studentIdx = document.getElementById('alumnoSelect').value;
+            if (studentIdx === "") {
+                alert("Selecciona un alumno.");
+                return;
+            }
+
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const matObj = estructuraMaterias.find(m => m.id === matId);
+            const nombreAlumno = alumnosGlobal[`${matId}_${grupo}`][studentIdx];
+            const listaActividades = actividadesGlobal[matId] || [];
+
+            const criteriosAcumulados = {};
+
+            listaActividades.forEach(act => {
+                const keyEval = `${matId}_${grupo}_${act.id}_${studentIdx}`;
+                const evalData = evaluacionesGlobal[keyEval] || {};
+
+                act.indicadores.forEach(ind => {
+                    const val = evalData[ind.id];
+                    if (val !== undefined) {
+                        const listaCrit = getCriteriosDeIndicador(ind);
+                        listaCrit.forEach(crit => {
+                            if (!criteriosAcumulados[crit]) criteriosAcumulados[crit] = [];
+                            criteriosAcumulados[crit].push(val);
+                        });
+                    }
+                });
+            });
+
+            let htmlFilasCriterios = '';
+            let sumaMediasCriterios = 0;
+            const criteriosOrdenados = Object.keys(criteriosAcumulados).sort(compararCodigosCriterio);
+
+            criteriosOrdenados.forEach(crit => {
+                const notas = criteriosAcumulados[crit];
+                const mediaCrit = (notas.reduce((a,b)=>a+b, 0) / notas.length).toFixed(2);
+                sumaMediasCriterios += parseFloat(mediaCrit);
+
+                htmlFilasCriterios += `
+                    <tr>
+                        <td style="font-weight:700;">${crit}</td>
+                        <td style="text-align:center;">${notas.length} registro(s) evaluado(s)</td>
+                        <td style="text-align:center; font-weight:800; color:#1C4D3E; font-size:14px;">${mediaCrit}</td>
+                    </tr>
+                `;
+            });
+
+            const totalCritCount = criteriosOrdenados.length;
+            const notaGlobalMateria = totalCritCount > 0 ? (sumaMediasCriterios / totalCritCount).toFixed(2) : '--';
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Progreso Materia - ${nombreAlumno}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; margin: 30px; color: #1E293B; font-size: 12px; }
+                        .header { border-bottom: 2px solid #1C4D3E; padding-bottom: 12px; margin-bottom: 20px; }
+                        h1 { color: #1C4D3E; margin: 0 0 4px 0; font-size: 18px; font-weight: 800; }
+                        .meta { color: #64748B; font-size: 12px; margin: 2px 0; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        th, td { border: 1px solid #E2E8F0; padding: 10px; text-align: left; }
+                        th { background-color: #F7F7F3; color: #1C4D3E; font-size: 10px; text-transform: uppercase; }
+                        .box-score { background: #1C4D3E; color: white; padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>INFORME DE PROGRESO EN LA MATERIA POR CRITERIOS</h1>
+                        <div class="meta"><strong>Alumno/a:</strong> ${nombreAlumno}</div>
+                        <div class="meta"><strong>Materia:</strong> ${matObj.nombre} | <strong>Grupo:</strong> ${grupo}</div>
+                        <div class="meta"><strong>Fecha Informe:</strong> ${new Date().toLocaleDateString('es-ES')}</div>
+                    </div>
+
+                    <h3>Rendimiento Acumulado por Criterio de Evaluación (Ordenados)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Criterio de Evaluación</th>
+                                <th style="text-align:center;">Registros Evaluados</th>
+                                <th style="text-align:center;">Nota Media Acumulada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${totalCritCount > 0 ? htmlFilasCriterios : '<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Sin evaluaciones registradas hasta la fecha.</td></tr>'}
+                        </tbody>
+                    </table>
+
+                    <div class="box-score">
+                        <div>
+                            <strong style="font-size:14px;">Nota Media Global en la Materia</strong>
+                            <div style="font-size:10px; opacity:0.8;">Media global ponderando todos los Criterios únicos por igual</div>
+                        </div>
+                        <div style="font-size:28px; font-weight:800;">${notaGlobalMateria} / 10</div>
+                    </div>
+
+                    <script>
+                        window.onload = function() { setTimeout(function() { window.print(); }, 400); };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        /* Exportación General de la Clase (Criterios Únicos Ordenados de Menor a Mayor) */
+        function exportarPDFCriteriosClase() {
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const act = getActividadActual();
+
+            if (!act) {
+                alert("Selecciona primero una actividad válida.");
+                return;
+            }
+
+            const matObj = estructuraMaterias.find(m => m.id === matId);
+            const keyGrupo = `${matId}_${grupo}`;
+            const listaAlumnos = alumnosGlobal[keyGrupo] || [];
+
+            if (listaAlumnos.length === 0) {
+                alert("No hay alumnos registrados en este grupo.");
+                return;
+            }
+
+            // Mapa global de criterios de la actividad
+            const criteriosMapa = {};
+            act.indicadores.forEach(ind => {
+                const listaCrit = getCriteriosDeIndicador(ind);
+                listaCrit.forEach(critName => {
+                    if (!criteriosMapa[critName]) criteriosMapa[critName] = [];
+                    criteriosMapa[critName].push(ind);
+                });
+            });
+
+            // Lista de Criterios ÚNICOS ordenados numéricamente (de menor a mayor)
+            const listaCriteriosCodigos = Object.keys(criteriosMapa).sort(compararCodigosCriterio);
+            let sumaNotasGlobales = 0;
+            let totalEvaluados = 0;
+
+            let filasTabla = '';
+
+            listaAlumnos.forEach((alumno, idx) => {
+                let keyEval = `${matId}_${grupo}_${act.id}_${idx}`;
+                let evalData = evaluacionesGlobal[keyEval] || {};
+
+                let celsCriterios = '';
+                let sumaMediasCritAlumno = 0;
+                let ctnCritAlumno = 0;
+
+                listaCriteriosCodigos.forEach(crit => {
+                    let indsDelCriterio = criteriosMapa[crit];
+                    let sumaCrit = 0;
+                    let ctnCrit = 0;
+
+                    indsDelCriterio.forEach(ind => {
+                        if (evalData[ind.id] !== undefined) {
+                            sumaCrit += evalData[ind.id];
+                            ctnCrit++;
+                        }
+                    });
+
+                    if (ctnCrit > 0) {
+                        let mediaCrit = (sumaCrit / ctnCrit);
+                        sumaMediasCritAlumno += mediaCrit;
+                        ctnCritAlumno++;
+                        celsCriterios += `<td style="text-align:center; font-weight:600;">${mediaCrit.toFixed(1)}</td>`;
+                    } else {
+                        celsCriterios += `<td style="text-align:center; color:#94a3b8;">--</td>`;
+                    }
+                });
+
+                let globalStr = '--';
+                if (ctnCritAlumno === listaCriteriosCodigos.length && ctnCritAlumno > 0) {
+                    let globalVal = (sumaMediasCritAlumno / ctnCritAlumno);
+                    globalStr = globalVal.toFixed(2);
+                    sumaNotasGlobales += globalVal;
+                    totalEvaluados++;
+                }
+
+                filasTabla += `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td style="font-weight: 500;">${alumno}</td>
+                        ${celsCriterios}
+                        <td style="text-align:center; font-weight:bold; background:#F8FAFC; color:#1C4D3E;">${globalStr}</td>
+                    </tr>
+                `;
+            });
+
+            let mediaClaseStr = totalEvaluados > 0 ? (sumaNotasGlobales / totalEvaluados).toFixed(2) : '--';
+            let thCriterios = listaCriteriosCodigos.map(c => `<th style="text-align:center;">${c}</th>`).join('');
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Informe Clase - ${matObj.nombre} G${grupo}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; margin: 30px; color: #1E293B; font-size: 12px; }
+                        .header { border-bottom: 2px solid #1C4D3E; padding-bottom: 12px; margin-bottom: 20px; }
+                        h1 { color: #1C4D3E; margin: 0 0 6px 0; font-size: 20px; font-weight: 800; }
+                        .meta { color: #64748B; font-size: 12px; margin: 2px 0; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #E2E8F0; padding: 8px 12px; text-align: left; }
+                        th { background-color: #F7F7F3; color: #1C4D3E; font-size: 10px; text-transform: uppercase; }
+                        tr:nth-child(even) { background-color: #FAFAFA; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>INFORME DE EVALUACIÓN DE CLASE (CRITERIOS ORDENADOS)</h1>
+                        <div class="meta"><strong>Materia:</strong> ${matObj.nombre} | <strong>Grupo:</strong> ${grupo}</div>
+                        <div class="meta"><strong>Actividad:</strong> ${act.titulo}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">#</th>
+                                <th>Alumno / Alumna</th>
+                                ${thCriterios}
+                                <th style="text-align:center; background:#E8F0EC;">Nota Global</th>
+                            </tr>
+                        </thead>
+                        <tbody>${filasTabla}</tbody>
+                    </table>
+                    <div style="margin-top:20px; padding:12px; background:#F7F7F3; border-radius:8px; font-weight:bold; color:#1C4D3E;">
+                        Media Global de la Clase: ${mediaClaseStr} / 10
+                    </div>
+                    <script>
+                        window.onload = function() { setTimeout(function() { window.print(); }, 400); };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function exportarCSV() {
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const act = getActividadActual();
+            if (!act) return;
+
+            const keyGrupo = `${matId}_${grupo}`;
+            const listaAlumnos = alumnosGlobal[keyGrupo] || [];
+            
+            let csvContent = "data:text/csv;charset=utf-8,Materia,Grupo,Alumno";
+            act.indicadores.forEach((ind, i) => {
+                csvContent += `,Indicador_${i+1}`;
+            });
+            csvContent += ",Nota_Media_Global\n";
+
+            listaAlumnos.forEach((nombre, idx) => {
+                let keyEval = `${matId}_${grupo}_${act.id}_${idx}`;
+                let evalData = evaluacionesGlobal[keyEval] || {};
+                let rowStr = `"${matId}","${grupo}","${nombre}"`;
+
+                const notasPorCriterio = {};
+
+                act.indicadores.forEach(ind => {
+                    let val = evalData[ind.id];
+                    if (val !== undefined) {
+                        rowStr += `,${val}`;
+                        const listaCrit = getCriteriosDeIndicador(ind);
+                        listaCrit.forEach(crit => {
+                            if(!notasPorCriterio[crit]) notasPorCriterio[crit] = [];
+                            notasPorCriterio[crit].push(val);
+                        });
+                    } else {
+                        rowStr += `,`;
+                    }
+                });
+
+                const codigosOrdenados = Object.keys(notasPorCriterio).sort(compararCodigosCriterio);
+                const mediasCrit = codigosOrdenados.map(c => {
+                    const arr = notasPorCriterio[c];
+                    return arr.reduce((a,b)=>a+b,0)/arr.length;
+                });
+
+                let mediaStr = mediasCrit.length > 0 ? (mediasCrit.reduce((a,b)=>a+b,0)/mediasCrit.length).toFixed(2) : '';
+                rowStr += `,${mediaStr}\n`;
+                csvContent += rowStr;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Notas_${matId}_G${grupo}_${act.id}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        /* MODALES - CREAR/EDITAR ACTIVIDADES CON MÚLTIPLES CRITERIOS */
+        function abrirModalNuevaActividad() {
+            document.getElementById('editActividadId').value = "";
+            document.getElementById('modalActividadTituloHeader').textContent = "Añadir Nueva Actividad";
+            document.getElementById('nuevaActTitulo').value = "";
+            document.getElementById('contenedorCreadorIndicadores').innerHTML = "";
+            agregarCampoIndicadorModal();
+            document.getElementById('modalActividad').style.display = 'flex';
+        }
+
+        function abrirModalEditarActividad() {
+            const act = getActividadActual();
+            if (!act) {
+                alert("No hay ninguna actividad seleccionada para editar.");
+                return;
+            }
+            document.getElementById('editActividadId').value = act.id;
+            document.getElementById('modalActividadTituloHeader').textContent = "Editar Actividad y Rúbrica";
+            document.getElementById('nuevaActTitulo').value = act.titulo;
+            document.getElementById('contenedorCreadorIndicadores').innerHTML = "";
+
+            act.indicadores.forEach(ind => { agregarCampoIndicadorModal(ind); });
+            document.getElementById('modalActividad').style.display = 'flex';
+        }
+
+        function cerrarModalActividad() {
+            document.getElementById('modalActividad').style.display = 'none';
+        }
+
+        function agregarCampoIndicadorModal(indData = null) {
+            const container = document.getElementById('contenedorCreadorIndicadores');
+            const num = container.children.length + 1;
+            const indId = indData ? indData.id : `ind_${Date.now()}_${num}`;
+            
+            const defaultNiveles = [
+                { id: "ins", nombre: "Insuficiente", min: 1.0, max: 2.9, desc: "Desempeño insuficiente en el indicador." },
+                { id: "inc", nombre: "Incompleto", min: 3.0, max: 4.9, desc: "Desempeño incompleto o con imprecisiones." },
+                { id: "bas", nombre: "Básico", min: 5.0, max: 6.9, desc: "Cumple con los requisitos básicos solicitados." },
+                { id: "not", nombre: "Notable", min: 7.0, max: 8.9, desc: "Buen nivel de desempeño y precisión." },
+                { id: "sob", nombre: "Sobresaliente", min: 9.0, max: 10.0, desc: "Nivel de desempeño excelente y destacado." }
+            ];
+
+            const niveles = indData ? indData.niveles : defaultNiveles;
+            const tituloVal = indData ? indData.titulo : "";
+            const listaCriteriosIniciales = indData ? getCriteriosDeIndicador(indData) : [""];
+
+            let div = document.createElement('div');
+            div.className = 'ind-editor-item';
+            div.dataset.indId = indId;
+
+            let nivelesHTML = '';
+            niveles.forEach(lvl => {
+                nivelesHTML += `
+                    <div style="border:1px solid var(--border-light); padding:10px; border-radius:10px; background:white; margin-bottom:8px;">
+                        <strong style="display:block; font-size:0.8rem; margin-bottom:4px; color:var(--forest-primary);">${lvl.nombre}</strong>
+                        <div style="display:flex; gap:8px; margin-bottom:6px;">
+                            <input type="number" class="form-input lvl-min" step="0.1" value="${lvl.min}" style="width:50%; font-size:0.8rem; padding:4px 8px;">
+                            <input type="number" class="form-input lvl-max" step="0.1" value="${lvl.max}" style="width:50%; font-size:0.8rem; padding:4px 8px;">
+                        </div>
+                        <textarea class="form-textarea lvl-desc" rows="2" style="width:100%; font-size:0.8rem;">${lvl.desc}</textarea>
+                        <input type="hidden" class="lvl-id" value="${lvl.id}">
+                        <input type="hidden" class="lvl-nombre" value="${lvl.nombre}">
+                    </div>
+                `;
+            });
+
+            let criteriosInputsHTML = '';
+            listaCriteriosIniciales.forEach(c => {
+                criteriosInputsHTML += `
+                    <div class="criterio-input-row">
+                        <input type="text" class="form-input edit-ind-criterio-val" value="${c}" placeholder="Ej: 1.1">
+                        <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="eliminarFilaCriterio(this)">✕</button>
+                    </div>
+                `;
+            });
+
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <strong style="color:var(--forest-primary);">Indicador #${num}</strong>
+                    <button type="button" class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="this.closest('.ind-editor-item').remove()">🗑️ Eliminar Indicador</button>
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Título del Indicador</label>
+                    <input type="text" class="form-input edit-ind-titulo" value="${tituloVal}" placeholder="Ej: Precisión en el trazado técnico">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Criterios de Evaluación Asociados</label>
+                    <div class="contenedor-criterios-list">
+                        ${criteriosInputsHTML}
+                    </div>
+                    <button type="button" class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; margin-top:4px;" onclick="agregarFilaCriterio(this)">+ Añadir otro Criterio</button>
+                </div>
+                <details>
+                    <summary style="cursor:pointer; font-weight:700; color:var(--forest-primary); font-size:0.82rem; margin:10px 0;">⚙️ Modificar Descripciones y Rangos</summary>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-top:10px;">
+                        ${nivelesHTML}
+                    </div>
+                </details>
+            `;
+            container.appendChild(div);
+        }
+
+        function agregarFilaCriterio(btn) {
+            const listCont = btn.previousElementSibling;
+            const newRow = document.createElement('div');
+            newRow.className = 'criterio-input-row';
+            newRow.innerHTML = `
+                <input type="text" class="form-input edit-ind-criterio-val" value="" placeholder="Ej: 1.2">
+                <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="eliminarFilaCriterio(this)">✕</button>
+            `;
+            listCont.appendChild(newRow);
+        }
+
+        function eliminarFilaCriterio(btn) {
+            const listCont = btn.closest('.contenedor-criterios-list');
+            if (listCont.querySelectorAll('.criterio-input-row').length > 1) {
+                btn.closest('.criterio-input-row').remove();
+            } else {
+                btn.previousElementSibling.value = '';
+            }
+        }
+
+        function guardarActividadModal() {
+            const matId = document.getElementById('materiaSelect').value;
+            const actIdEdit = document.getElementById('editActividadId').value;
+            const titulo = document.getElementById('nuevaActTitulo').value.trim();
+
+            if (!titulo) {
+                alert("Por favor, introduce el título de la actividad.");
+                return;
+            }
+
+            const container = document.getElementById('contenedorCreadorIndicadores');
+            const indElements = container.querySelectorAll('.ind-editor-item');
+            let nuevosIndicadores = [];
+
+            indElements.forEach((el, idx) => {
+                let indTitulo = el.querySelector('.edit-ind-titulo').value.trim();
+                let indId = el.dataset.indId || `ind_${Date.now()}_${idx}`;
+
+                // Extraer lista de criterios ingresados por separado
+                let critInputs = el.querySelectorAll('.edit-ind-criterio-val');
+                let listaCrit = [];
+                critInputs.forEach(inp => {
+                    let val = inp.value.trim();
+                    if (val) listaCrit.push(val);
+                });
+
+                if (listaCrit.length === 0) listaCrit = ['General'];
+
+                let nivelesBoxes = el.querySelectorAll('.lvl-id');
+                let listaNiveles = [];
+
+                nivelesBoxes.forEach(box => {
+                    let parentBox = box.closest('div');
+                    listaNiveles.push({
+                        id: box.value,
+                        nombre: parentBox.querySelector('.lvl-nombre').value,
+                        min: parseFloat(parentBox.querySelector('.lvl-min').value) || 0,
+                        max: parseFloat(parentBox.querySelector('.lvl-max').value) || 10,
+                        desc: parentBox.querySelector('.lvl-desc').value.trim()
+                    });
+                });
+
+                if (indTitulo) {
+                    nuevosIndicadores.push({
+                        id: indId,
+                        titulo: indTitulo,
+                        criterio: listaCrit[0], // Compatibilidad con versiones previas
+                        criterios: listaCrit,
+                        niveles: listaNiveles
+                    });
+                }
+            });
+
+            if (nuevosIndicadores.length === 0) {
+                alert("Añade al menos un indicador con título.");
+                return;
+            }
+
+            if (!actividadesGlobal[matId]) actividadesGlobal[matId] = [];
+
+            if (actIdEdit) {
+                let actObj = actividadesGlobal[matId].find(a => a.id === actIdEdit);
+                if (actObj) {
+                    actObj.titulo = titulo;
+                    actObj.indicadores = nuevosIndicadores;
+                }
+            } else {
+                const nuevaAct = {
+                    id: `act_${Date.now()}`,
+                    titulo: titulo,
+                    indicadores: nuevosIndicadores
+                };
+                actividadesGlobal[matId].push(nuevaAct);
+            }
+
+            localStorage.setItem('docente_actividades_v3', JSON.stringify(actividadesGlobal));
+
+            poblarActividades();
+            if (actIdEdit) {
+                document.getElementById('actividadSelect').value = actIdEdit;
+            } else {
+                document.getElementById('actividadSelect').value = actividadesGlobal[matId][actividadesGlobal[matId].length - 1].id;
+            }
+            
+            cerrarModalActividad();
+            alCambiarActividad();
+            alert("Actividad y rúbrica guardadas correctamente.");
+        }
+
+        function abrirModalAlumnos() {
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const matObj = estructuraMaterias.find(m => m.id === matId);
+
+            document.getElementById('grupoAlumnosLabel').textContent = `${matObj.nombre} - ${grupo === 'Único' ? 'Grupo Único' : 'Grupo ' + grupo}`;
+            
+            const key = `${matId}_${grupo}`;
+            const lista = alumnosGlobal[key] || [];
+            document.getElementById('listaAlumnosTextarea').value = lista.join('\n');
+            
+            document.getElementById('modalAlumnos').style.display = 'flex';
+        }
+
+        function cerrarModalAlumnos() {
+            document.getElementById('modalAlumnos').style.display = 'none';
+        }
+
+        function guardarAlumnosModal() {
+            const matId = document.getElementById('materiaSelect').value;
+            const grupo = document.getElementById('grupoSelect').value;
+            const key = `${matId}_${grupo}`;
+
+            const rawText = document.getElementById('listaAlumnosTextarea').value;
+            const lineas = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+            alumnosGlobal[key] = lineas;
+            localStorage.setItem('docente_alumnos_v3', JSON.stringify(alumnosGlobal));
+
+            poblarAlumnos();
+            cerrarModalAlumnos();
+            alert("Lista de alumnos actualizada correctamente.");
+        }
+
+        /* Exportar PDF de la Rúbrica completa para compartir en Google Classroom */
+        function exportarPDFRubricaClassroom() {
+            const matId = document.getElementById('materiaSelect').value;
+            const act = getActividadActual();
+
+            if (!act) {
+                alert("Selecciona primero una actividad válida.");
+                return;
+            }
+
+            const matObj = estructuraMaterias.find(m => m.id === matId);
+
+            let filasRubrica = '';
+            act.indicadores.forEach(ind => {
+                const listaCrit = getCriteriosDeIndicador(ind);
+                let celdasNiveles = '';
+
+                ind.niveles.forEach(lvl => {
+                    celdasNiveles += `
+                        <td style="vertical-align: top; font-size: 11px; line-height: 1.35;">
+                            <div style="font-weight: 800; color: #1C4D3E; margin-bottom: 4px;">${lvl.min} - ${lvl.max} pts</div>
+                            <div>${lvl.desc}</div>
+                        </td>
+                    `;
+                });
+
+                filasRubrica += `
+                    <tr>
+                        <td style="vertical-align: top; background: #F8FAFC;">
+                            <div style="font-weight: 700; color: #1E293B; margin-bottom: 6px;">${ind.titulo}</div>
+                            <div style="display: inline-block; background: #E8F0EC; color: #1C4D3E; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px;">
+                                Criterios: ${listaCrit.join(', ')}
+                            </div>
+                        </td>
+                        ${celdasNiveles}
+                    </tr>
+                `;
+            });
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Rúbrica - ${act.titulo}</title>
+                    <style>
+                        @page { size: landscape; margin: 14mm; }
+                        body { font-family: 'Inter', -apple-system, sans-serif; color: #1E293B; margin: 0; }
+                        .header { border-bottom: 2px solid #1C4D3E; padding-bottom: 10px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-end; }
+                        h1 { color: #1C4D3E; margin: 0 0 4px 0; font-size: 18px; font-weight: 800; }
+                        .meta { color: #64748B; font-size: 12px; }
+                        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+                        th, td { border: 1px solid #CBD5E1; padding: 8px 10px; text-align: left; word-wrap: break-word; }
+                        th { background-color: #1C4D3E; color: white; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; text-align: center; }
+                        th:first-child { text-align: left; width: 22%; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div>
+                            <h1>RÚBRICA DE EVALUACIÓN: ${act.titulo}</h1>
+                            <div class="meta"><strong>Materia:</strong> ${matObj.nombre}</div>
+                        </div>
+                        <div class="meta">Criterios e indicadores de evaluación</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Indicador de Evaluación</th>
+                                <th>Insuficiente</th>
+                                <th>Incompleto</th>
+                                <th>Básico</th>
+                                <th>Notable</th>
+                                <th>Sobresaliente</th>
+                            </tr>
+                        </thead>
+                        <tbody>${filasRubrica}</tbody>
+                    </table>
+                    <script>
+                        window.onload = function() { setTimeout(function() { window.print(); }, 400); };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        /* Grabar todos los datos introducidos directamente en el código de la aplicación HTML */
+        function descargarAppConDatos() {
+            const studentIdx = document.getElementById('alumnoSelect').value;
+            if (studentIdx !== "" && Object.keys(notasActuales).length > 0) {
+                evaluacionesGlobal[getClaveEvaluacion()] = { ...notasActuales };
+                localStorage.setItem('docente_evaluaciones_v3', JSON.stringify(evaluacionesGlobal));
+            }
+
+            // Clonar el documento actual y limpiar elementos dinámicos del DOM antes de serializar
+            const docClone = document.documentElement.cloneNode(true);
+            const selMat = docClone.querySelector('#materiaSelect');
+            const selGrp = docClone.querySelector('#grupoSelect');
+            const selAct = docClone.querySelector('#actividadSelect');
+            const selAlu = docClone.querySelector('#alumnoSelect');
+            const rubCont = docClone.querySelector('#rubricaContainer');
+            const detailBox = docClone.querySelector('#studentDetailBox');
+            const critLive = docClone.querySelector('#criteriosLiveContainer');
+
+            if (selMat) selMat.innerHTML = '';
+            if (selGrp) selGrp.innerHTML = '';
+            if (selAct) selAct.innerHTML = '';
+            if (selAlu) selAlu.innerHTML = '<option value="">-- Seleccionar Alumno --</option>';
+            if (rubCont) rubCont.innerHTML = '';
+            if (detailBox) detailBox.style.display = 'none';
+            if (critLive) critLive.innerHTML = '';
+            const authOv = docClone.querySelector('#authOverlay');
+            const authInp = docClone.querySelector('#authPasswordInput');
+            const authErr = docClone.querySelector('#authErrorMsg');
+            if (authOv) authOv.classList.remove('hidden');
+            if (authInp) authInp.value = '';
+            if (authErr) authErr.textContent = '';
+
+            let codigoHTML = "<!DOCTYPE html>\n" + docClone.outerHTML;
+
+            const jsonAlumnos = JSON.stringify(alumnosGlobal, null, 4);
+            const jsonActividades = JSON.stringify(actividadesGlobal, null, 4);
+            const jsonEvaluaciones = JSON.stringify(evaluacionesGlobal, null, 4);
+
+            codigoHTML = codigoHTML.replace(
+                /const alumnosIniciales = [\s\S]*?;\s*const actividadesIniciales =/,
+                `const alumnosIniciales = ${jsonAlumnos};\n\n        const actividadesIniciales =`
+            );
+
+            codigoHTML = codigoHTML.replace(
+                /const actividadesIniciales = [\s\S]*?;\s*const evaluacionesIniciales =/,
+                `const actividadesIniciales = ${jsonActividades};\n\n        const evaluacionesIniciales =`
+            );
+
+            codigoHTML = codigoHTML.replace(
+                /const evaluacionesIniciales = [\s\S]*?;\s*let alumnosGlobal =/,
+                `const evaluacionesIniciales = ${jsonEvaluaciones};\n\n        let alumnosGlobal =`
+            );
+
+            codigoHTML = codigoHTML.replace(
+                /const CLAVE_INICIAL_APP = "[^"]*";/,
+                `const CLAVE_INICIAL_APP = ${JSON.stringify(claveActualApp)};`
+            );
+
+            const blob = new Blob([codigoHTML], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CUADERNO_RUBRICAS_CON_DATOS_${new Date().toISOString().slice(0,10)}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
